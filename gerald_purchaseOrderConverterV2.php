@@ -1410,32 +1410,6 @@
 								}
 							}
 						}
-
-						if(count($priceInFormatArray) > 0 AND $_SESSION['idNumber']=='0346')
-						{
-							$itemPrice = $totalUnitPrice;
-
-							$totalPrice = round($itemPrice,4) * $itemQuantity;
-							// $totalAmount += round($totalPrice,2);
-							
-							$priceInFormat = ($itemPrice > 0) ? $sign." ".number_format($itemPrice, 4, '.', ',') : '';
-							// $priceInFormat = ($itemPrice > 0) ? $sign." ".number_format($itemPrice, 2, '.', ',') : '';
-							$totalPriceInFormat = ($totalPrice > 0) ? $sign." ".number_format(($totalPrice), 2, '.', ',') : ' ';							
-							foreach($priceInFormatArray as $key => $value)
-							{
-								if($key==0)
-								{
-									$priceInFormatArray[$key] = $priceInFormat;
-									$totalPriceInFormatArray[$key] = $totalPriceInFormat;
-								}
-								else
-								{
-									$priceInFormatArray[$key] = ' ';
-									$totalPriceInFormatArray[$key] = ' ';	
-								}
-							}
-						}
-
 					}
 					else
 					{
@@ -1866,6 +1840,34 @@
 						if($identifier==4 AND $supplyType==1 AND $pvc!='') $itemDescription .= " ".$pvc;
 					}
 					
+					if(count($priceInFormatArray) > 0 AND $_SESSION['idNumber']=='0346')
+					{
+						$receivingDateArray = array_unique($receivingDateArray);
+						$sendingDateArray = array_unique($sendingDateArray);
+
+						$itemPrice = $totalUnitPrice;
+
+						$totalPrice = round($itemPrice,4) * $itemQuantity;
+						// $totalAmount += round($totalPrice,2);
+						
+						$priceInFormat = ($itemPrice > 0) ? $sign." ".number_format($itemPrice, 4, '.', ',') : '';
+						// $priceInFormat = ($itemPrice > 0) ? $sign." ".number_format($itemPrice, 2, '.', ',') : '';
+						$totalPriceInFormat = ($totalPrice > 0) ? $sign." ".number_format(($totalPrice), 2, '.', ',') : ' ';							
+						foreach($priceInFormatArray as $key => $value)
+						{
+							if($key==0)
+							{
+								$priceInFormatArray[$key] = $priceInFormat;
+								$totalPriceInFormatArray[$key] = $totalPriceInFormat;
+							}
+							else
+							{
+								$priceInFormatArray[$key] = ' ';
+								$totalPriceInFormatArray[$key] = ' ';	
+							}
+						}
+					}
+
 					$unitName = '';
 					$sql = "SELECT unitName FROM purchasing_units WHERE unitId = ".$itemUnit." LIMIT 1";
 					$queryUnits = $db->query($sql);
