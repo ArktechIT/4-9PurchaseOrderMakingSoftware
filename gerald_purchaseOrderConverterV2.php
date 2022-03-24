@@ -1276,9 +1276,9 @@
 						}
 					//~ }
 					
+					$totalUnitPrice = 0;
 					if($poNo!='')
 					{
-						$totalUnitPrice = 0;
 						$sql = "SELECT `poContentId`, `productId`, `itemName`, `itemDescription`, `itemQuantity`, `itemUnit`, `itemContentQuantity`, `itemContentUnit`, `itemPrice`, `itemFlag`, `receivingDate` FROM purchasing_pocontents WHERE poNumber LIKE '".$poNo."' AND lotNumber LIKE '".$lotNumber."'";
 						$queryPoContents = $db->query($sql);
 						if($queryPoContents AND $queryPoContents->num_rows > 0)
@@ -1296,7 +1296,7 @@
 								
 								$totalUnitPrice += $itemPrice;
 								$totalPrice = round($itemPrice,4) * $itemQuantity;
-								$totalAmount += round($totalPrice,2);
+								if($_SESSION['idNumber']!='0346') $totalAmount += round($totalPrice,2);
 								
 								$priceInFormat = ($itemPrice > 0) ? $sign." ".number_format($itemPrice, 4, '.', ',') : '';
 								// $priceInFormat = ($itemPrice > 0) ? $sign." ".number_format($itemPrice, 2, '.', ',') : '';
@@ -1798,9 +1798,9 @@
 											//~ {
 												//~ $itemPrice = $itemPrice - ($itemPrice*0.10);
 											//~ }
-											
+											$totalUnitPrice += $itemPrice;
 											$totalPrice = round($itemPrice,4) * $itemQuantity;
-											$totalAmount += round($totalPrice,2);
+											if($_SESSION['idNumber']!='0346') $totalAmount += round($totalPrice,2);
 											
 											$priceInFormat = ($itemPrice > 0) ? $sign." ".number_format($itemPrice, 4, '.', ',') : '';
 											$totalPriceInFormat = ($totalPrice > 0) ? $sign." ".number_format(($totalPrice), 2, '.', ',') : ' ';
@@ -1840,7 +1840,7 @@
 						if($identifier==4 AND $supplyType==1 AND $pvc!='') $itemDescription .= " ".$pvc;
 					}
 					
-					if(count($priceInFormatArray) > 0 AND $_SESSION['idNumber']=='0346')
+					if($totalUnitPrice > 0 AND $_SESSION['idNumber']=='0346')
 					{
 						$receivingDateArray = array_unique($receivingDateArray);
 						$sendingDateArray = array_unique($sendingDateArray);
@@ -1848,7 +1848,7 @@
 						$itemPrice = $totalUnitPrice;
 
 						$totalPrice = round($itemPrice,4) * $itemQuantity;
-						// $totalAmount += round($totalPrice,2);
+						$totalAmount += round($totalPrice,2);
 						
 						$priceInFormat = ($itemPrice > 0) ? $sign." ".number_format($itemPrice, 4, '.', ',') : '';
 						// $priceInFormat = ($itemPrice > 0) ? $sign." ".number_format($itemPrice, 2, '.', ',') : '';

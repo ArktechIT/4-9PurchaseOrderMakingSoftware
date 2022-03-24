@@ -1355,7 +1355,7 @@
 							}
 						}
 					//~ }
-					
+					$totalUnitPrice = 0;
 					if($poNo!='')
 					{
 						$sql = "SELECT `poContentId`, `productId`, `itemName`, `itemDescription`, `itemQuantity`, `itemUnit`, `itemContentQuantity`, `itemContentUnit`, `itemPrice`, `itemFlag` FROM purchasing_pocontents WHERE poNumber LIKE '".$poNo."' AND lotNumber LIKE '".$lotNumber."'";
@@ -1372,8 +1372,9 @@
 								$itemUnit = $resultPoContents['itemUnit'];
 								$itemPrice = $resultPoContents['itemPrice'];
 								
+								$totalUnitPrice += $itemPrice;
 								$totalPrice = round($itemPrice,4) * $itemQuantity;
-								$totalAmount += round($totalPrice,2);
+								if($_SESSION['idNumber']!='0346') $totalAmount += round($totalPrice,2);
 								
 								$priceInFormat = ($itemPrice > 0) ? $sign." ".number_format($itemPrice, 4, '.', ',') : '';
 								// $priceInFormat = ($itemPrice > 0) ? $sign." ".number_format($itemPrice, 2, '.', ',') : '';
@@ -1479,8 +1480,9 @@
 							$itemUnit = $resultForPurchase['itemUnit'];
 							$itemPrice = $resultForPurchase['itemPrice'];
 							
+							$totalUnitPrice += $itemPrice;
 							$totalPrice = round($itemPrice,4) * $itemQuantity;
-							$totalAmount += round($totalPrice,2);
+							if($_SESSION['idNumber']!='0346') $totalAmount += round($totalPrice,2);
 							
 							$priceInFormat = ($itemPrice > 0) ? $sign." ".number_format($itemPrice, 4, '.', ',') : '';
 							// $priceInFormat = ($itemPrice > 0) ? $sign." ".number_format($itemPrice, 2, '.', ',') : '';
@@ -1910,9 +1912,9 @@
 											//~ {
 												//~ $itemPrice = $itemPrice - ($itemPrice*0.10);
 											//~ }
-											
+											$totalUnitPrice += $itemPrice;
 											$totalPrice = round($itemPrice,4) * $itemQuantity;
-											$totalAmount += round($totalPrice,2);
+											if($_SESSION['idNumber']!='0346') $totalAmount += round($totalPrice,2);
 											
 											$priceInFormat = ($itemPrice > 0) ? $sign." ".number_format($itemPrice, 4, '.', ',') : '';
 											// $priceInFormat = ($itemPrice > 0) ? $sign." ".number_format($itemPrice, 2, '.', ',') : '';
@@ -1952,6 +1954,34 @@
 						if($identifier==1 OR ($identifier==4 AND $supplyType==2) AND $itemDescription=='')	$itemDescription = $partNumber." ".$revisionId;
 						if($identifier==4 AND $supplyType==1 AND $pvc!='') $itemDescription .= " ".$pvc;
 					}
+
+					if($totalUnitPrice > 0 AND $_SESSION['idNumber']=='0346')
+					{
+						$receivingDateArray = array_unique($receivingDateArray);
+						$sendingDateArray = array_unique($sendingDateArray);
+
+						$itemPrice = $totalUnitPrice;
+
+						$totalPrice = round($itemPrice,4) * $itemQuantity;
+						$totalAmount += round($totalPrice,2);
+						
+						$priceInFormat = ($itemPrice > 0) ? $sign." ".number_format($itemPrice, 4, '.', ',') : '';
+						// $priceInFormat = ($itemPrice > 0) ? $sign." ".number_format($itemPrice, 2, '.', ',') : '';
+						$totalPriceInFormat = ($totalPrice > 0) ? $sign." ".number_format(($totalPrice), 2, '.', ',') : ' ';							
+						foreach($priceInFormatArray as $key => $value)
+						{
+							if($key==0)
+							{
+								$priceInFormatArray[$key] = $priceInFormat;
+								$totalPriceInFormatArray[$key] = $totalPriceInFormat;
+							}
+							else
+							{
+								$priceInFormatArray[$key] = ' ';
+								$totalPriceInFormatArray[$key] = ' ';	
+							}
+						}
+					}					
 					
 					$unitName = '';
 					$sql = "SELECT unitName FROM purchasing_units WHERE unitId = ".$itemUnit." LIMIT 1";
