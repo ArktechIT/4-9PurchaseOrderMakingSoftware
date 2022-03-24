@@ -872,7 +872,7 @@
 
 	if($poTerms!='') $terms = $poTerms;
 
-	$mergeSubconPriceFlag = (strtotime($poInputDateTime) >= strtotime('2022-03-24') AND $_SESSION['idNumber']=='0346') ? 1 : 0;
+	$mergeSubconPriceFlag = (strtotime($poInputDateTime) >= strtotime('2022-03-25')) ? 1 : 0;
 	
 	$pdf=new PDF('P','mm','A4');
 	$pdf->SetTitle('PO Number '.$poNumber);
