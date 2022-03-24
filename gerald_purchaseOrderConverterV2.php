@@ -761,6 +761,8 @@
 	}
 
 	if($poTerms!='') $terms = $poTerms;
+
+	$mergeSubconPriceFlag = (strtotime($poInputDateTime) >= strtotime('2022-03-24') AND $_SESSION['idNumber']=='0346') ? 1 : 0;
 	
 	$pdf=new PDF('P','mm','A4');
 	$pdf->SetTitle('PO Number '.$poNumber);
@@ -1296,7 +1298,7 @@
 								
 								$totalUnitPrice += $itemPrice;
 								$totalPrice = round($itemPrice,4) * $itemQuantity;
-								if($_SESSION['idNumber']!='0346') $totalAmount += round($totalPrice,2);
+								if($mergeSubconPriceFlag==0) $totalAmount += round($totalPrice,2);
 								
 								$priceInFormat = ($itemPrice > 0) ? $sign." ".number_format($itemPrice, 4, '.', ',') : '';
 								// $priceInFormat = ($itemPrice > 0) ? $sign." ".number_format($itemPrice, 2, '.', ',') : '';
@@ -1800,7 +1802,7 @@
 											//~ }
 											$totalUnitPrice += $itemPrice;
 											$totalPrice = round($itemPrice,4) * $itemQuantity;
-											if($_SESSION['idNumber']!='0346') $totalAmount += round($totalPrice,2);
+											if($mergeSubconPriceFlag==0) $totalAmount += round($totalPrice,2);
 											
 											$priceInFormat = ($itemPrice > 0) ? $sign." ".number_format($itemPrice, 4, '.', ',') : '';
 											$totalPriceInFormat = ($totalPrice > 0) ? $sign." ".number_format(($totalPrice), 2, '.', ',') : ' ';
@@ -1840,7 +1842,7 @@
 						if($identifier==4 AND $supplyType==1 AND $pvc!='') $itemDescription .= " ".$pvc;
 					}
 					
-					if($totalUnitPrice > 0 AND $_SESSION['idNumber']=='0346')
+					if($totalUnitPrice > 0 AND $mergeSubconPriceFlag==1)
 					{
 						$receivingDateArray = array_unique($receivingDateArray);
 						$sendingDateArray = array_unique($sendingDateArray);
