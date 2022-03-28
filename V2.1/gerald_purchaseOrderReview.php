@@ -503,7 +503,7 @@
 					
 					$amount = $unitPrice * $workingQuantity;
 					
-					$totalAmount += $amount;
+					$totalAmount += round($amount,2);
 					
 					echo "
 						<tr>
@@ -512,7 +512,7 @@
 							<td>".$productDescription."</td>
 							<td align='right'>".$unitPrice."</td>
 							<td align='right'>".$workingQuantity."</td>
-							<td align='right'>".$amount."</td>
+							<td align='right'>".number_format($amount,2,'.',',')."</td>
 							<td>".$purpose."</td>
 							<td>".$dateNeeded."</td>
 							<td>".$productMOQ."</td>
