@@ -813,6 +813,8 @@
 	if($shipmentType==1)		$shipping='Land';
 	else if($shipmentType==2)	$shipping='Air';
 	else if($shipmentType==3)	$shipping='Sea';
+
+	if($poNumber=='0017154')	$shipping = 'To be advised';
 	
 	$yen = Iconv('UTF-8','ISO-8859-1//TRANSLIT','¥');
 	
