@@ -65,6 +65,7 @@
 						<th></th>
 						<th>".displayText('L246')."</th>
 						<th>".displayText('L247')."</th>
+						<th>".displayText('L112')."</th>
 						<th>".displayText('L267')."</th>
 						<th>For PO</th>
 						<th>Amount</th>
@@ -320,8 +321,9 @@
 						$actionButtons .= "<a title='Details' onclick=\"TINY.box.show({url:'rhay_viewMaterialDetails.php?lotNumber=".$lotNumber."&dateNeeded=".$dateNeeded."', width:550, height:500, opacity:20,top:1,animate:true,close:true,openjs:function(){myFunction()}});\"><img src='/".v."/Common Data/Templates/images/details.png' height='20' ></a>";
 					}
 					
+					$currency = '';
 					$unitPrice = $priceCount = $breakFlag = 0;
-					$sql = "SELECT priceLowerRange, priceUpperRange, price FROM purchasing_price WHERE productId = ".$productId." AND currency = ".$currency."";
+					$sql = "SELECT priceLowerRange, priceUpperRange, price, currency FROM purchasing_price WHERE productId = ".$productId." AND currency = ".$currency."";
 					$queryPrice = $db->query($sql);
 					if($queryPrice AND $queryPrice->num_rows > 0)
 					{
@@ -330,6 +332,7 @@
 							$priceLowerRange = $resultPrice['priceLowerRange'];
 							$priceUpperRange = $resultPrice['priceUpperRange'];
 							$price = $resultPrice['price'];
+							$currency = $resultPrice['currency'];
 							
 							$breakFlag = 0;
 							
@@ -504,12 +507,18 @@
 					$amount = $unitPrice * $workingQuantity;
 					
 					$totalAmount += round($amount,2);
+
+					$currencyName = '';
+					if($currency==1)	$currencyName = 'Dollar';
+					elseif($currency==2)	$currencyName = 'Peso';
+					else if($currency==3)	$currencyName = 'Yen';
 					
 					echo "
 						<tr>
 							<td>".++$count."</td>
 							<td>".$productName."</td>
 							<td>".$productDescription."</td>
+							<td align='right'>".$currencyName."</td>
 							<td align='right'>".$unitPrice."</td>
 							<td align='right'>".$workingQuantity."</td>
 							<td align='right'>".number_format($amount,2,'.',',')."</td>
@@ -532,7 +541,7 @@
 		
 		echo "
 			<tr>
-				<th colspan='5'></th>
+				<th colspan='6'></th>
 				<th>".$totalAmount."</th>
 				<th colspan='10'></th>
 			</tr>
@@ -544,7 +553,7 @@
 			
 			echo "
 				<tr>
-					<th colspan='16'><input type='submit' name='purchaseReviewConfirmation' form='purchaseReviewForm' value='OKAY'></th>
+					<th colspan='17'><input type='submit' name='purchaseReviewConfirmation' form='purchaseReviewForm' value='OKAY'></th>
 				</tr>
 			";
 		}
