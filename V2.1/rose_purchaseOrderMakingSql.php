@@ -1361,6 +1361,26 @@
 
 						$sql = "UPDATE warehouse_inventory SET inventoryQuantity = '".$totalQty2."' WHERE inventoryId = '".$inventoryId."' LIMIT 1";
 						$queryUpdate = $db->query($sql);
+
+						$sql = "SELECT materialComputationId, materialComputationIdSource FROM ppic_materialcomputation WHERE lotNumber LIKE '".$lotNumber."' LIMIT 1";
+						$queryMaterialComputation = $db->query($sql);
+						if($queryMaterialComputation AND $queryMaterialComputation->num_rows > 0)
+						{
+							$resultMaterialComputation = $queryMaterialComputation->fetch_assoc();
+							$materialComputationId = ($resultMaterialComputation['materialComputationIdSource'] > 0) ? $resultMaterialComputation['materialComputationIdSource'] : $resultMaterialComputation['materialComputationId'];
+							
+							$lotNumberArray = array();
+							$sql = "SELECT lotNumber FROM ppic_materialcomputationdetails WHERE materialComputationId = ".$materialComputationId."";
+							$queryMaterialComputationDetails = $db->query($sql);
+							if($queryMaterialComputationDetails AND $queryMaterialComputationDetails->num_rows > 0)
+							{
+								while($resultMaterialComputationDetails = $queryMaterialComputationDetails->fetch_assoc())
+								{
+									$lotNumberArray[] = $resultMaterialComputationDetails['lotNumber'];
+								}
+								materialTemporaryBooking('',$lotNumberArray,$inventoryId);
+							}
+						}						
 					}
 				}
 				if($identifier==1 OR ($identifier==4 AND $supplyType==2))
