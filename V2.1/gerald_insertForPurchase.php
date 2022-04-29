@@ -210,12 +210,14 @@
 					$resultSupplierProductLinking = $querySupplierProductLinking->fetch_assoc();
 					$productId = $resultSupplierProductLinking['productId'];
 				
-					$itemName = $itemDescription = $itemUnit = $itemContentQuantity = $itemContentUnit = '';
-					$sql = "SELECT productName, productDescription, productUnit, productContentQuantity, productContentUnit FROM purchasing_supplierproducts WHERE productId = ".$productId." LIMIT 1";
+					$supplierId = $supplierType = $itemName = $itemDescription = $itemUnit = $itemContentQuantity = $itemContentUnit = '';
+					$sql = "SELECT supplierId, supplierType , productName, productDescription, productUnit, productContentQuantity, productContentUnit FROM purchasing_supplierproducts WHERE productId = ".$productId." LIMIT 1";
 					$querySupplierProducts = $db->query($sql);
 					if($querySupplierProducts AND $querySupplierProducts->num_rows > 0)
 					{
 						$resultSupplierProducts = $querySupplierProducts->fetch_assoc();
+						$supplierId = $resultSupplierProducts['supplierId'];
+						$supplierType = $resultSupplierProducts['supplierType'];
 						$itemName = $resultSupplierProducts['productName'];
 						$itemDescription = $resultSupplierProducts['productDescription'];
 						$itemUnit = $resultSupplierProducts['productUnit'];
@@ -255,8 +257,6 @@
 						if($productPrice > 0)
 						{
 							//~ $workSchedId = $_POST['workSchedId'];
-							$supplierId = $subconId;
-							$supplierType = 2;
 							$poCurrency = $currency;
 							$itemPrice = $productPrice;
 							$itemQuantity = $workingQuantity;
