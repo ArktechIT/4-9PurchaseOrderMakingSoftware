@@ -321,7 +321,6 @@
 						$actionButtons .= "<a title='Details' onclick=\"TINY.box.show({url:'rhay_viewMaterialDetails.php?lotNumber=".$lotNumber."&dateNeeded=".$dateNeeded."', width:550, height:500, opacity:20,top:1,animate:true,close:true,openjs:function(){myFunction()}});\"><img src='/".v."/Common Data/Templates/images/details.png' height='20' ></a>";
 					}
 					
-					$currency = '';
 					$unitPrice = $priceCount = $breakFlag = 0;
 					$sql = "SELECT priceLowerRange, priceUpperRange, price, currency FROM purchasing_price WHERE productId = ".$productId." AND currency = ".$currency."";
 					$queryPrice = $db->query($sql);
@@ -332,7 +331,6 @@
 							$priceLowerRange = $resultPrice['priceLowerRange'];
 							$priceUpperRange = $resultPrice['priceUpperRange'];
 							$price = $resultPrice['price'];
-							$currency = $resultPrice['currency'];
 							
 							$breakFlag = 0;
 							
